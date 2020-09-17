@@ -1,13 +1,17 @@
 package grafics;
 
+import java.awt.event.*;
+
+import java.awt.*;
 import javax.naming.ldap.UnsolicitedNotification;
+
 import  javax.swing.*;//importa la biblioteca grafica
 import java.awt.*;
 
 public class fMenu {
     public static void main(String[] args ){
         myWindow marco1= new myWindow(); //crea la ventana
-        marco1.setVisible(true);// vuelve la ventana visible
+
         marco1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//hace que la ventana se cierre
 
     }
@@ -28,9 +32,35 @@ class myWindow extends JFrame{
         setTitle("Mensager");
         setLocation(screenHeight/4,screenWidth/6);
         setResizable(false);
+
+        Paper plank = new Paper();
+        add(plank);
+
+        setVisible(true);// vuelve la ventana visible
+
     }
 }
 
-class box extends JPanel{
+class Paper extends JPanel{
 
+    public Paper (){
+        setLayout(new BorderLayout());
+
+        JPanel cuadroBlanco = new JPanel();
+
+        JMenuBar menu = new JMenuBar();
+
+        JMenu enviar = new JMenu("Enviar");
+
+        menu.add(enviar);
+
+        cuadroBlanco.add(menu);
+
+        add(cuadroBlanco,BorderLayout.SOUTH);
+        //-------------------------------------------
+
+        JTextPane body = new JTextPane();
+        add(body,BorderLayout.CENTER);
+
+    }
 }
