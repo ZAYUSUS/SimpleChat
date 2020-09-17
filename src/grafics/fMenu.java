@@ -1,6 +1,8 @@
 package grafics;
 
-import  javax.swing.*;
+import javax.naming.ldap.UnsolicitedNotification;
+import  javax.swing.*;//importa la biblioteca grafica
+import java.awt.*;
 
 public class fMenu {
     public static void main(String[] args ){
@@ -16,6 +18,19 @@ public class fMenu {
  */
 class myWindow extends JFrame{
     public myWindow(){
-        setSize(500,300);
+        Toolkit screen = Toolkit.getDefaultToolkit();
+        Dimension screenSize=screen.getScreenSize();
+
+        int screenHeight = screenSize.height;
+        int screenWidth = screenSize.width;
+
+        setSize(screenHeight/2,screenWidth/4);
+        setTitle("Mensager");
+        setLocation(screenHeight/4,screenWidth/6);
+        setResizable(false);
     }
+}
+
+class box extends JPanel{
+
 }
