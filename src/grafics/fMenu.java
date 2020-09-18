@@ -24,8 +24,10 @@ class myWindow extends JFrame{
     public Color azulito = new Color(28,232,175);//color de fondo
     public Color amarillo = new Color(219,190,22);
     public  Color rosado = new Color(219,22,154);
+    public  Color verde = new Color(14,139,143);
     //---------------------------------------------------------
     public JPanel paper;
+    public JTextArea caja;
     public myWindow(){
         Toolkit screen = Toolkit.getDefaultToolkit();
         Dimension screenSize=screen.getScreenSize();
@@ -48,6 +50,7 @@ class myWindow extends JFrame{
         PaperCreator();
         ComponentesEtiquetas();
         Botones();
+        EntradasTexto();
     }
     private void PaperCreator(){//Clase que dibuja en la ventana funciona para introducir imagenes,texto, botones...
         paper = new JPanel();
@@ -67,10 +70,29 @@ class myWindow extends JFrame{
     }
     private void Botones(){
         JButton enviar = new JButton("Enviar");
-        enviar.setBounds(20,400,100,30);
+        enviar.setBounds(20,350,100,30);
         enviar.setBackground(rosado);//Agrega color al boton
         enviar.setFont(new Font("Daytona Pro Light",Font.PLAIN,20));
         paper.add(enviar);//Añade el boton a la ventana
+
+        ActionListener AccionBoton = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //codigo que se ejecuta al presionar el boton
+                System.out.println(caja.getText());
+            }
+        };
+        enviar.addActionListener(AccionBoton);
+    }
+    private void EntradasTexto(){//metodo que crea las entradas de texto
+        caja = new JTextArea();
+        //setText(String)
+        //.append
+        caja.setBounds(0,60,500,200);
+        caja.setFont(new Font("Daytona Pro Light",Font.PLAIN,20));
+        caja.setBackground(verde);
+        paper.add(caja);
+
     }
 }
 
