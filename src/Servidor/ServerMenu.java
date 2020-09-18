@@ -1,25 +1,27 @@
-package grafics;
+package Servidor;
 
-import java.awt.event.*;
-
+import javax.swing.*;
 import java.awt.*;
-import javax.naming.ldap.UnsolicitedNotification;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
-import  javax.swing.*;//importa la biblioteca grafica
 
-public class fMenu {
+public class ServerMenu {
     public static void main(String[] args ){
-        myWindow marco1= new myWindow(); //crea la ventana
-
+        myWindow2 marco1= new myWindow2(); //crea la ventana
         marco1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//hace que la ventana se cierre
 
     }
 }
 /*
-*Se crea la clase de la ventana que hereda
-* de la calse JFrame
+ *Se crea la clase de la ventana que hereda
+ * de la calse JFrame
  */
-class myWindow extends JFrame{
+class myWindow2 extends JFrame implements Runnable{
     //--------------------COLORES---------------------------
     public Color azulito = new Color(28,232,175);//color de fondo
     public Color amarillo = new Color(219,190,22);
@@ -28,7 +30,7 @@ class myWindow extends JFrame{
     //---------------------------------------------------------
     public JPanel paper;
     public JTextArea caja;
-    public myWindow(){
+    public myWindow2(){
         Toolkit screen = Toolkit.getDefaultToolkit();
         Dimension screenSize=screen.getScreenSize();
 
@@ -42,6 +44,9 @@ class myWindow extends JFrame{
         setResizable(false);
 
         setVisible(true);// vuelve la ventana visible
+
+        Thread Hilo = new Thread(this);
+        Hilo.start();
 
         Inicializador();
 
@@ -61,7 +66,7 @@ class myWindow extends JFrame{
     private void ComponentesEtiquetas(){
 
         //-----------------------------------------------------------------------
-        JLabel etiqueta = new JLabel("Mensajería",SwingConstants.LEFT);//etiqueta del titulo
+        JLabel etiqueta = new JLabel("Servidor",SwingConstants.LEFT);//etiqueta del titulo
         etiqueta.setBounds(0,0,400,50);
         etiqueta.setOpaque(true);//activa la opcion de editar el color de la etiqueta
         etiqueta.setBackground(amarillo);
@@ -94,5 +99,26 @@ class myWindow extends JFrame{
         paper.add(caja);
 
     }
-}
 
+    @Override
+    public void run() {
+        try {
+            ServerSocket Escuchar = new ServerSocket(9933);
+
+            while (true) {
+                Socket conector = Escuchar.accept();
+
+                DataInputStream Entradas = new DataInputStream(conector.getInputStream());
+
+                String mensaje = Entradas.readUTF();
+
+                caja.append(mensaje + '\n');
+
+                conector.close();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
