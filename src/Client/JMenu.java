@@ -33,6 +33,7 @@ class myWindow extends JFrame implements Runnable{
     //---------------------------------------------------------
     public JPanel paper;
     public JTextArea caja;
+    String Usuario = JOptionPane.showInputDialog("Nombre: ");
     public myWindow() {
         setSize(700,800);
         setTitle("Mensager");
@@ -59,7 +60,6 @@ class myWindow extends JFrame implements Runnable{
         this.getContentPane().add(paper);
     }
     private void ComponentesEtiquetas(){
-
         //-----------------------------------------------------------------------
         JLabel etiqueta = new JLabel("Cliente",SwingConstants.LEFT);//etiqueta del titulo
         etiqueta.setBounds(0,0,400,50);
@@ -75,6 +75,20 @@ class myWindow extends JFrame implements Runnable{
         JLabel indicaIP = new JLabel("IP",SwingConstants.CENTER);
         indicaIP.setBounds(510,600,70,30);
         paper.add(indicaIP);
+
+        JLabel indicaNombre = new JLabel("Nombre: ");
+        indicaNombre.setBounds(420,20,90,30);
+        indicaNombre.setFont(daytona);
+        paper.add(indicaNombre);
+
+        nombre = new JLabel();
+        nombre.setBounds(510,20,80,30);
+        nombre.setFont(daytona);
+        nombre.setOpaque(true);
+        nombre.setBackground(rosado);
+        nombre.setText(Usuario);
+        paper.add(nombre);
+
     }
     private void Botones(){
         JButton enviar = new JButton("Enviar");
@@ -89,7 +103,7 @@ class myWindow extends JFrame implements Runnable{
                 //codigo que se ejecuta al presionar el boton
                 //System.out.println(caja.getText());
                 try {
-                    Socket conector = new Socket("127.0.0.1", 9935);
+                    Socket conector = new Socket("127.0.0.1", 1);
 
                     InfoEnvio datos =  new InfoEnvio();
 
@@ -121,37 +135,28 @@ class myWindow extends JFrame implements Runnable{
         caja.setVisible(true);
         paper.add(caja);
 
-        nombre = new JTextField();
-        nombre.setBounds(200,20,200,30);
-        nombre.setFont(daytona);
-        nombre.setBackground(rosado);
-        nombre.setVisible(true);
-        paper.add(nombre);
-
         puerto = new JTextField();
         puerto.setBounds(300,550,200,30);
         puerto.setFont(daytona);
         puerto.setBackground(azulito);
-        puerto.setVisible(true);
         paper.add(puerto);
 
         direccion = new JTextField();
         direccion.setBounds(300,600,200,30);
         direccion.setFont(daytona);
         direccion.setBackground(azulito);
-        direccion.setVisible(true);
         paper.add(direccion);
 
         texto = new JTextField();
         texto.setBounds(30,450,500,30);
         texto.setFont(daytona);
         texto.setBackground(amarillo);
-        texto.setVisible(true);
         paper.add(texto);
 
 
     }
-    private JTextField nombre,puerto,texto,direccion;//crea las entradas de texto del nombre ,el puerto,Ip
+    private JTextField puerto,texto,direccion;//crea las entradas de texto del nombre ,el puerto,Ip
+    private JLabel nombre;
 
     @Override
     public void run() {//bloque donde estan los sockets

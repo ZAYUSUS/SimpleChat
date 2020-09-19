@@ -4,18 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 
 public class ServerMenu {
     public static void main(String[] args ){
         myWindow2 marco1= new myWindow2(); //crea la ventana
-        marco1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//hace que la ventana se cierre
+        marco1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//hace que la ventana se cierre\
+        Escanner puertos = new Escanner();
+        marco1.puertoDisponible = puertos.EscannerPuertos();
+        marco1.Inicializador();
 
     }
 }
@@ -32,6 +35,9 @@ class myWindow2 extends JFrame implements Runnable{
     //---------------------------------------------------------
     public JPanel paper;
     public JTextArea caja;
+    int puertoDisponible;
+    public JLabel localizacion;
+
     public myWindow2(){
 
         setSize(700,600);
@@ -42,10 +48,8 @@ class myWindow2 extends JFrame implements Runnable{
 
         setVisible(true);// vuelve la ventana visible
 
-        Inicializador();
-
     }
-    private void Inicializador(){
+    public void Inicializador(){
         Thread Hilo = new Thread(this);
         Hilo.start();
         PaperCreator();
@@ -68,6 +72,16 @@ class myWindow2 extends JFrame implements Runnable{
         etiqueta.setBackground(amarillo);
         etiqueta.setFont(new Font("Century Gothic",Font.PLAIN,45));
         paper.add(etiqueta);//etiqueta se agrega al panel
+
+        localizacion = new JLabel();
+        localizacion.setBounds(470,20,60,50);
+        localizacion.setText(Integer.toString(puertoDisponible));
+        paper.add(localizacion);
+
+        JLabel indicadorLocat = new JLabel("Puerto");
+        indicadorLocat.setBounds(400,20,60,50);
+        indicadorLocat.setText("Puerto");
+        paper.add(indicadorLocat);
     }
     private void Botones(){
         JButton enviar = new JButton("Enviar");
@@ -95,11 +109,11 @@ class myWindow2 extends JFrame implements Runnable{
         paper.add(caja);
 
     }
-
     @Override
     public void run() {
         try {
-            ServerSocket Escuchar = new ServerSocket(9935);
+            ServerSocket Escuchar = new ServerSocket(puertoDisponible);
+            System.out.println(puertoDisponible);
 
             String nombre,puerto,mensaje,direccion;
 
@@ -133,5 +147,22 @@ class myWindow2 extends JFrame implements Runnable{
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+}
+class Escanner{
+    public int EscannerPuertos() {
+        int port=1;
+        for (;port < 1024; port++){
+            try {
+                ServerSocket prueba = new ServerSocket(port);
+                System.out.println(port + "\n");
+                prueba.close();
+                break;
+            } catch (UnknownHostException e) {
+                System.err.println("No se conoce host");
+            }catch (IOException e) { }
+
+        }
+        return port;
     }
 }
