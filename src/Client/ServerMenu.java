@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -41,13 +42,12 @@ class myWindow2 extends JFrame implements Runnable{
 
         setVisible(true);// vuelve la ventana visible
 
-        Thread Hilo = new Thread(this);
-        Hilo.start();
-
         Inicializador();
 
     }
     private void Inicializador(){
+        Thread Hilo = new Thread(this);
+        Hilo.start();
         PaperCreator();
         ComponentesEtiquetas();
         Botones();
@@ -99,9 +99,9 @@ class myWindow2 extends JFrame implements Runnable{
     @Override
     public void run() {
         try {
-            ServerSocket Escuchar = new ServerSocket(9933);
+            ServerSocket Escuchar = new ServerSocket(9935);
 
-            String nombre,puerto,mensaje;
+            String nombre,puerto,mensaje,direccion;
 
             InfoEnvio paqueteEntregado;
 
@@ -115,8 +115,17 @@ class myWindow2 extends JFrame implements Runnable{
                 nombre = paqueteEntregado.getNombre();//recuperamos la informacion del objeto
                 puerto =  paqueteEntregado.getPuerto();
                 mensaje = paqueteEntregado.getMensaje();
+                direccion = paqueteEntregado.getIp();
 
-                caja.append(nombre+">> "+ mensaje + " >puerto "+puerto+"\n");
+                caja.append(nombre+">> "+ mensaje + " >Ip "+direccion+">>Puerto "+ puerto +"\n");
+
+                Socket reconector =  new Socket(direccion,9933);
+                ObjectOutputStream paqueteReenvio = new ObjectOutputStream(reconector.getOutputStream());
+
+                paqueteReenvio.writeObject(paqueteEntregado);
+                paqueteReenvio.close();
+
+                reconector.close();
 
                 conector.close();
             }

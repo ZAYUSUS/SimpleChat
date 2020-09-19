@@ -1,7 +1,7 @@
 package Client;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import  java.net.*;
@@ -22,7 +22,7 @@ public class JMenu {
  *Se crea la clase de la ventana que hereda
  * de la calse JFrame
  */
-class myWindow extends JFrame{
+class myWindow extends JFrame implements Runnable{
     //--------------------COLORES---------------------------
     public Color azulito = new Color(28,232,175);//color de fondo
     public Color amarillo = new Color(219,190,22);
@@ -33,29 +33,29 @@ class myWindow extends JFrame{
     //---------------------------------------------------------
     public JPanel paper;
     public JTextArea caja;
-    public myWindow(){
-
-        setSize(700,600);
+    public myWindow() {
+        setSize(700,800);
         setTitle("Mensager");
         setLocation(800,300);
-        setBackground(Color.PINK);
         setResizable(false);
 
         setVisible(true);// vuelve la ventana visible
 
         Inicializador();
-
     }
     private void Inicializador(){
         PaperCreator();
         ComponentesEtiquetas();
-        Botones();
         EntradasTexto();
+        Botones();
+
+        Thread Hilo1 = new Thread(this);
+        Hilo1.start();
     }
     private void PaperCreator(){//Clase que dibuja en la ventana funciona para introducir imagenes,texto, botones...
         paper = new JPanel();
         paper.setLayout(null);//desactiva el diseño de el layout
-        paper.setBackground(azulito);
+        //paper.setBackground(azulito);
         this.getContentPane().add(paper);
     }
     private void ComponentesEtiquetas(){
@@ -67,10 +67,18 @@ class myWindow extends JFrame{
         etiqueta.setBackground(amarillo);
         etiqueta.setFont(new Font("Century Gothic",Font.PLAIN,45));
         paper.add(etiqueta);//etiqueta se agrega al panel
+
+        JLabel indicaPuerto = new JLabel("Puerto",SwingConstants.CENTER);
+        indicaPuerto.setBounds(510,550,70,30);
+        paper.add(indicaPuerto);
+
+        JLabel indicaIP = new JLabel("IP",SwingConstants.CENTER);
+        indicaIP.setBounds(510,600,70,30);
+        paper.add(indicaIP);
     }
     private void Botones(){
         JButton enviar = new JButton("Enviar");
-        enviar.setBounds(20,450,100,30);
+        enviar.setBounds(20,550,100,30);
         enviar.setBackground(rosado);//Agrega color al boton
         enviar.setFont(new Font("Daytona Pro Light",Font.PLAIN,20));
         paper.add(enviar);//Añade el boton a la ventana
@@ -81,13 +89,14 @@ class myWindow extends JFrame{
                 //codigo que se ejecuta al presionar el boton
                 //System.out.println(caja.getText());
                 try {
-                    Socket conector = new Socket("192.168.0.14", 9933);
+                    Socket conector = new Socket("127.0.0.1", 9935);
 
                     InfoEnvio datos =  new InfoEnvio();
 
                     datos.setNombre(nombre.getText());
-                    datos.setMensaje(caja.getText());
+                    datos.setMensaje(texto.getText());
                     datos.setPuerto(puerto.getText());
+                    datos.setIp(direccion.getText());
 
                     ObjectOutputStream paquete = new ObjectOutputStream(conector.getOutputStream());
                     paquete.writeObject(datos);
@@ -109,27 +118,79 @@ class myWindow extends JFrame{
         caja.setBounds(0,60,600,350);
         caja.setFont(daytona);
         caja.setBackground(verde);
+        caja.setVisible(true);
         paper.add(caja);
 
         nombre = new JTextField();
         nombre.setBounds(200,20,200,30);
         nombre.setFont(daytona);
         nombre.setBackground(rosado);
+        nombre.setVisible(true);
         paper.add(nombre);
 
         puerto = new JTextField();
-        puerto.setBounds(300,450,200,30);
+        puerto.setBounds(300,550,200,30);
         puerto.setFont(daytona);
         puerto.setBackground(azulito);
+        puerto.setVisible(true);
         paper.add(puerto);
 
-    }
-    private JTextField nombre,puerto;//crea las entradas de texto del nombre y el puerto
+        direccion = new JTextField();
+        direccion.setBounds(300,600,200,30);
+        direccion.setFont(daytona);
+        direccion.setBackground(azulito);
+        direccion.setVisible(true);
+        paper.add(direccion);
 
+        texto = new JTextField();
+        texto.setBounds(30,450,500,30);
+        texto.setFont(daytona);
+        texto.setBackground(amarillo);
+        texto.setVisible(true);
+        paper.add(texto);
+
+
+    }
+    private JTextField nombre,puerto,texto,direccion;//crea las entradas de texto del nombre ,el puerto,Ip
+
+    @Override
+    public void run() {//bloque donde estan los sockets
+        try{
+
+            ServerSocket Servercliente = new ServerSocket(9933);
+            Socket cliente;
+
+            InfoEnvio paqueteRecibido;
+
+            while (true){
+
+                cliente = Servercliente.accept();
+                ObjectInputStream datosEntrada = new ObjectInputStream(cliente.getInputStream());
+
+                paqueteRecibido = (InfoEnvio) datosEntrada.readObject();
+
+                caja.append(paqueteRecibido.getNombre()+">>"+paqueteRecibido.getMensaje()+"\n");
+
+
+
+            }
+
+        }catch (Exception a){
+            System.out.println(a.getMessage());
+        }
+    }
 }
 
 class InfoEnvio implements Serializable {//clase para almacenar los datos del cliente
-    private String nombre,puerto,mensaje;
+    private String nombre,puerto,mensaje,Ip;
+
+    public String getIp() {
+        return Ip;
+    }
+
+    public void setIp(String ip) {
+        Ip = ip;
+    }
 
     public String getMensaje() {
         return mensaje;
