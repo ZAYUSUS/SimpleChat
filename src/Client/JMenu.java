@@ -2,6 +2,8 @@ package Client;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import  java.net.*;
 import java.awt.event.*;
 
@@ -26,19 +28,16 @@ class myWindow extends JFrame{
     public Color amarillo = new Color(219,190,22);
     public  Color rosado = new Color(219,22,154);
     public  Color verde = new Color(14,139,143);
+    //------------------Fuentes-------------------------------------
+    public Font daytona = new Font("Daytona Pro Light",Font.PLAIN,20);
     //---------------------------------------------------------
     public JPanel paper;
     public JTextArea caja;
     public myWindow(){
-        Toolkit screen = Toolkit.getDefaultToolkit();
-        Dimension screenSize=screen.getScreenSize();
 
-        int screenHeight = screenSize.height;
-        int screenWidth = screenSize.width;
-
-        setSize(screenHeight/2,screenWidth/4);
+        setSize(700,600);
         setTitle("Mensager");
-        setLocation(screenHeight/4,screenWidth/6);
+        setLocation(800,300);
         setBackground(Color.PINK);
         setResizable(false);
 
@@ -71,7 +70,7 @@ class myWindow extends JFrame{
     }
     private void Botones(){
         JButton enviar = new JButton("Enviar");
-        enviar.setBounds(20,350,100,30);
+        enviar.setBounds(20,450,100,30);
         enviar.setBackground(rosado);//Agrega color al boton
         enviar.setFont(new Font("Daytona Pro Light",Font.PLAIN,20));
         paper.add(enviar);//Añade el boton a la ventana
@@ -81,17 +80,23 @@ class myWindow extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 //codigo que se ejecuta al presionar el boton
                 //System.out.println(caja.getText());
-                try (Socket miSocket = new Socket("192.168.0.14", 9933)) {
+                try {
+                    Socket conector = new Socket("192.168.0.14", 9933);
 
-                    DataOutputStream datosSalida = new DataOutputStream(miSocket.getOutputStream());
+                    InfoEnvio datos =  new InfoEnvio();
 
-                    datosSalida.writeUTF(caja.getText());
-                    datosSalida.close();
+                    datos.setNombre(nombre.getText());
+                    datos.setMensaje(caja.getText());
+                    datos.setPuerto(puerto.getText());
 
-                } catch (UnknownHostException e){
-                    e.printStackTrace();
-                }catch (IOException e){
-                    System.out.println(e.getMessage());
+                    ObjectOutputStream paquete = new ObjectOutputStream(conector.getOutputStream());
+                    paquete.writeObject(datos);
+                    conector.close();//cierra la conexion
+
+                    } catch (UnknownHostException e1){
+                        e1.printStackTrace();
+                    }catch (IOException e1){
+                        System.out.println(e1.getMessage());
                 }
             }
         };
@@ -101,12 +106,55 @@ class myWindow extends JFrame{
         caja = new JTextArea();
         //setText(String)
         //.append
-        caja.setBounds(0,60,500,200);
-        caja.setFont(new Font("Daytona Pro Light",Font.PLAIN,20));
+        caja.setBounds(0,60,600,350);
+        caja.setFont(daytona);
         caja.setBackground(verde);
         paper.add(caja);
 
+        nombre = new JTextField();
+        nombre.setBounds(200,20,200,30);
+        nombre.setFont(daytona);
+        nombre.setBackground(rosado);
+        paper.add(nombre);
+
+        puerto = new JTextField();
+        puerto.setBounds(300,450,200,30);
+        puerto.setFont(daytona);
+        puerto.setBackground(azulito);
+        paper.add(puerto);
+
     }
+    private JTextField nombre,puerto;//crea las entradas de texto del nombre y el puerto
+
 }
 
+class InfoEnvio implements Serializable {//clase para almacenar los datos del cliente
+    private String nombre,puerto,mensaje;
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getPuerto() {
+        return puerto;
+    }
+
+    public void setPuerto(String puerto) {
+        this.puerto = puerto;
+    }
+
+}
+// informacion para el codigo por parte de pildorasinformaticas en youtube
 

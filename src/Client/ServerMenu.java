@@ -1,4 +1,4 @@
-package Servidor;
+package Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -31,15 +32,10 @@ class myWindow2 extends JFrame implements Runnable{
     public JPanel paper;
     public JTextArea caja;
     public myWindow2(){
-        Toolkit screen = Toolkit.getDefaultToolkit();
-        Dimension screenSize=screen.getScreenSize();
 
-        int screenHeight = screenSize.height;
-        int screenWidth = screenSize.width;
-
-        setSize(screenHeight/2,screenWidth/4);
+        setSize(700,600);
         setTitle("Mensager");
-        setLocation(screenHeight/4,screenWidth/6);
+        setLocation(800,300);
         setBackground(Color.PINK);
         setResizable(false);
 
@@ -75,7 +71,7 @@ class myWindow2 extends JFrame implements Runnable{
     }
     private void Botones(){
         JButton enviar = new JButton("Enviar");
-        enviar.setBounds(20,350,100,30);
+        enviar.setBounds(20,450,100,30);
         enviar.setBackground(rosado);//Agrega color al boton
         enviar.setFont(new Font("Daytona Pro Light",Font.PLAIN,20));
         paper.add(enviar);//Añade el boton a la ventana
@@ -93,7 +89,7 @@ class myWindow2 extends JFrame implements Runnable{
         caja = new JTextArea();
         //setText(String)
         //.append
-        caja.setBounds(0,60,500,200);
+        caja.setBounds(0,60,550,350);
         caja.setFont(new Font("Daytona Pro Light",Font.PLAIN,20));
         caja.setBackground(verde);
         paper.add(caja);
@@ -105,19 +101,27 @@ class myWindow2 extends JFrame implements Runnable{
         try {
             ServerSocket Escuchar = new ServerSocket(9933);
 
+            String nombre,puerto,mensaje;
+
+            InfoEnvio paqueteEntregado;
+
             while (true) {
                 Socket conector = Escuchar.accept();
 
-                DataInputStream Entradas = new DataInputStream(conector.getInputStream());
+                ObjectInputStream paquete = new ObjectInputStream(conector.getInputStream());//se recibe el objeto con la info
 
-                String mensaje = Entradas.readUTF();
+                paqueteEntregado = (InfoEnvio) paquete.readObject();//lee el objeto serializado
 
-                caja.append(mensaje + '\n');
+                nombre = paqueteEntregado.getNombre();//recuperamos la informacion del objeto
+                puerto =  paqueteEntregado.getPuerto();
+                mensaje = paqueteEntregado.getMensaje();
+
+                caja.append(nombre+">> "+ mensaje + " >puerto "+puerto+"\n");
 
                 conector.close();
             }
 
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
