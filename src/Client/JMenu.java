@@ -57,7 +57,7 @@ class myWindow extends JFrame implements Runnable{
     private void PaperCreator(){//Clase que dibuja en la ventana funciona para introducir imagenes,texto, botones...
         paper = new JPanel();
         paper.setLayout(null);//desactiva el diseño de el layout
-        //paper.setBackground(azulito);
+        paper.setBackground(azulito);
         this.getContentPane().add(paper);
         ComponentesEtiquetas();
         Botones();
@@ -84,6 +84,21 @@ class myWindow extends JFrame implements Runnable{
         indicaNombre.setBounds(420,20,90,30);
         indicaNombre.setFont(daytona);
         paper.add(indicaNombre);
+
+        JLabel indicaEscritor = new JLabel("Escriba Aquí");
+        indicaEscritor.setBounds(200,450,500,30);
+        indicaEscritor.setFont(new Font("Daytona Pro Light",Font.PLAIN,10));
+        paper.add(indicaEscritor);
+
+        JLabel indicaEspacio2 = new JLabel("Escriba Aquí");
+        indicaEspacio2.setBounds(350,600,200,30);
+        indicaEspacio2.setFont(new Font("Daytona Pro Light",Font.PLAIN,10));
+        paper.add(indicaEspacio2);
+
+        JLabel indicaEspacio = new JLabel("Escriba Aquí");
+        indicaEspacio.setBounds(400,550,200,30);
+        indicaEspacio.setFont(new Font("Daytona Pro Light",Font.PLAIN,10));
+        paper.add(indicaEspacio);
 
         nombre = new JLabel();
         nombre.setBounds(510,20,80,30);
