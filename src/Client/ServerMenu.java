@@ -16,10 +16,6 @@ public class ServerMenu {
     public static void main(String[] args ){
         myWindow2 marco1= new myWindow2(); //crea la ventana
         marco1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//hace que la ventana se cierre\
-        Escanner puertos = new Escanner();
-        marco1.puertoDisponible = puertos.EscannerPuertos();
-        marco1.Inicializador();
-
     }
 }
 /*
@@ -35,7 +31,6 @@ class myWindow2 extends JFrame implements Runnable{
     //---------------------------------------------------------
     public JPanel paper;
     public JTextArea caja;
-    int puertoDisponible;
     public JLabel localizacion;
 
     public myWindow2(){
@@ -47,15 +42,16 @@ class myWindow2 extends JFrame implements Runnable{
         setResizable(false);
 
         setVisible(true);// vuelve la ventana visible
+        Inicializador();
 
     }
     public void Inicializador(){
-        Thread Hilo = new Thread(this);
-        Hilo.start();
         PaperCreator();
         ComponentesEtiquetas();
         Botones();
         EntradasTexto();
+        Thread Hilo = new Thread(this);
+        Hilo.start();
     }
     private void PaperCreator(){//Clase que dibuja en la ventana funciona para introducir imagenes,texto, botones...
         paper = new JPanel();
@@ -75,7 +71,6 @@ class myWindow2 extends JFrame implements Runnable{
 
         localizacion = new JLabel();
         localizacion.setBounds(470,20,60,50);
-        localizacion.setText(Integer.toString(puertoDisponible));
         paper.add(localizacion);
 
         JLabel indicadorLocat = new JLabel("Puerto");
@@ -94,15 +89,12 @@ class myWindow2 extends JFrame implements Runnable{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //codigo que se ejecuta al presionar el boton
-                System.out.println(caja.getText());
             }
         };
         enviar.addActionListener(AccionBoton);
     }
     private void EntradasTexto(){//metodo que crea las entradas de texto
         caja = new JTextArea();
-        //setText(String)
-        //.append
         caja.setBounds(0,60,550,350);
         caja.setFont(new Font("Daytona Pro Light",Font.PLAIN,20));
         caja.setBackground(verde);
@@ -112,8 +104,11 @@ class myWindow2 extends JFrame implements Runnable{
     @Override
     public void run() {
         try {
-            ServerSocket Escuchar = new ServerSocket(puertoDisponible);
-            System.out.println(puertoDisponible);
+            Escanner puertos = new Escanner();
+
+            localizacion.setText(Integer.toString(puertos.EscannerPuertos()));
+
+            ServerSocket Escuchar = new ServerSocket(puertos.EscannerPuertos());
 
             String nombre,puerto,mensaje,direccion;
 
@@ -149,20 +144,4 @@ class myWindow2 extends JFrame implements Runnable{
         }
     }
 }
-class Escanner{
-    public int EscannerPuertos() {
-        int port=1;
-        for (;port < 1024; port++){
-            try {
-                ServerSocket prueba = new ServerSocket(port);
-                System.out.println(port + "\n");
-                prueba.close();
-                break;
-            } catch (UnknownHostException e) {
-                System.err.println("No se conoce host");
-            }catch (IOException e) { }
 
-        }
-        return port;
-    }
-}

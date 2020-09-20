@@ -33,6 +33,8 @@ class myWindow extends JFrame implements Runnable{
     //---------------------------------------------------------
     public JPanel paper;
     public JTextArea caja;
+    public JLabel indicaPuerto;
+    public JLabel actualPuerto;
     String Usuario = JOptionPane.showInputDialog("Nombre: ");
     public myWindow() {
         setSize(700,800);
@@ -41,7 +43,6 @@ class myWindow extends JFrame implements Runnable{
         setResizable(false);
 
         setVisible(true);// vuelve la ventana visible
-
         Inicializador();
     }
     private void Inicializador(){
@@ -89,6 +90,16 @@ class myWindow extends JFrame implements Runnable{
         nombre.setText(Usuario);
         paper.add(nombre);
 
+        indicaPuerto = new JLabel(" Puerto de Escucha");
+        indicaPuerto.setBounds(510,630,150,30);
+        paper.add(indicaPuerto);
+
+        actualPuerto = new JLabel();
+        actualPuerto.setBounds(460,630,150,30);
+        paper.add(actualPuerto);
+
+
+
     }
     private void Botones(){
         JButton enviar = new JButton("Enviar");
@@ -101,9 +112,8 @@ class myWindow extends JFrame implements Runnable{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //codigo que se ejecuta al presionar el boton
-                //System.out.println(caja.getText());
                 try {
-                    Socket conector = new Socket("127.0.0.1", 1);
+                    Socket conector = new Socket("127.0.0.1", 1023);
 
                     InfoEnvio datos =  new InfoEnvio();
 
@@ -127,8 +137,6 @@ class myWindow extends JFrame implements Runnable{
     }
     private void EntradasTexto(){//metodo que crea las entradas de texto
         caja = new JTextArea();
-        //setText(String)
-        //.append
         caja.setBounds(0,60,600,350);
         caja.setFont(daytona);
         caja.setBackground(verde);
@@ -161,8 +169,9 @@ class myWindow extends JFrame implements Runnable{
     @Override
     public void run() {//bloque donde estan los sockets
         try{
-
-            ServerSocket Servercliente = new ServerSocket(9933);
+            Escanner entrada = new Escanner();
+            actualPuerto.setText(Integer.toString(entrada.EscannerPuertos()));
+            ServerSocket Servercliente = new ServerSocket(entrada.EscannerPuertos());
             Socket cliente;
 
             InfoEnvio paqueteRecibido;
@@ -175,8 +184,6 @@ class myWindow extends JFrame implements Runnable{
                 paqueteRecibido = (InfoEnvio) datosEntrada.readObject();
 
                 caja.append(paqueteRecibido.getNombre()+">>"+paqueteRecibido.getMensaje()+"\n");
-
-
 
             }
 
