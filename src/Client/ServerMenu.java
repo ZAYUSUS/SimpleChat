@@ -88,7 +88,7 @@ class myWindow2 extends JFrame implements Runnable{
         ActionListener AccionBoton = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //codigo que se ejecuta al presionar el boton
+                //lo que ejecuta
             }
         };
         enviar.addActionListener(AccionBoton);
@@ -128,10 +128,11 @@ class myWindow2 extends JFrame implements Runnable{
 
                 caja.append(nombre+">> "+ mensaje + " >Ip "+direccion+">>Puerto "+ puerto +"\n");
 
-                Socket reconector =  new Socket(direccion,9933);
+                Socket reconector =  new Socket(direccion,Integer.parseInt(puerto));
                 ObjectOutputStream paqueteReenvio = new ObjectOutputStream(reconector.getOutputStream());
 
                 paqueteReenvio.writeObject(paqueteEntregado);
+
                 paqueteReenvio.close();
 
                 reconector.close();

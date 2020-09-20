@@ -62,7 +62,7 @@ class myWindow extends JFrame implements Runnable{
     }
     private void ComponentesEtiquetas(){
         //-----------------------------------------------------------------------
-        JLabel etiqueta = new JLabel("Cliente",SwingConstants.LEFT);//etiqueta del titulo
+        JLabel etiqueta = new JLabel("CHAT",SwingConstants.LEFT);//etiqueta del titulo
         etiqueta.setBounds(0,0,400,50);
         etiqueta.setOpaque(true);//activa la opcion de editar el color de la etiqueta
         etiqueta.setBackground(amarillo);
@@ -113,9 +113,11 @@ class myWindow extends JFrame implements Runnable{
             public void actionPerformed(ActionEvent e) {
                 //codigo que se ejecuta al presionar el boton
                 try {
-                    Socket conector = new Socket("127.0.0.1", 1023);
+                    Socket conector = new Socket(direccion.getText(),Integer.parseInt(puerto.getText()));/*conecta el socket al servidor de escucha con el texto
+                    *de las entradas de texto
+                    */
 
-                    InfoEnvio datos =  new InfoEnvio();
+                    InfoEnvio datos =  new InfoEnvio();//crea un objeto de envio de datos
 
                     datos.setNombre(nombre.getText());
                     datos.setMensaje(texto.getText());
@@ -124,6 +126,7 @@ class myWindow extends JFrame implements Runnable{
 
                     ObjectOutputStream paquete = new ObjectOutputStream(conector.getOutputStream());
                     paquete.writeObject(datos);
+
                     conector.close();//cierra la conexion
 
                     } catch (UnknownHostException e1){
@@ -137,11 +140,13 @@ class myWindow extends JFrame implements Runnable{
     }
     private void EntradasTexto(){//metodo que crea las entradas de texto
         caja = new JTextArea();
-        caja.setBounds(0,60,600,350);
+        //caja.setBounds(20,60,600,350);
         caja.setFont(daytona);
-        caja.setBackground(verde);
-        caja.setVisible(true);
-        paper.add(caja);
+        caja.setEnabled(true);
+        caja.setEditable(false);
+        JScrollPane scroll = new JScrollPane(caja);
+        scroll.setBounds(20,60,600,350);
+        paper.add(scroll);
 
         puerto = new JTextField();
         puerto.setBounds(300,550,200,30);
@@ -153,6 +158,7 @@ class myWindow extends JFrame implements Runnable{
         direccion.setBounds(300,600,200,30);
         direccion.setFont(daytona);
         direccion.setBackground(azulito);
+        direccion.setText("127.0.0.1");
         paper.add(direccion);
 
         texto = new JTextField();
@@ -170,23 +176,48 @@ class myWindow extends JFrame implements Runnable{
     public void run() {//bloque donde estan los sockets
         try{
             Escanner entrada = new Escanner();
-            actualPuerto.setText(Integer.toString(entrada.EscannerPuertos()));
-            ServerSocket Servercliente = new ServerSocket(entrada.EscannerPuertos());
-            Socket cliente;
+
+            int conexion = entrada.EscannerPuertos();
+            actualPuerto.setText(Integer.toString(conexion));
+            ServerSocket Servercliente = new ServerSocket(conexion);//crea el puerto donde se escuchara
+            Socket cliente;//variable para el socket de envio recogida de datos
+
+            String nombre,puerto,mensaje,direccion;
 
             InfoEnvio paqueteRecibido;
 
             while (true){
-
                 cliente = Servercliente.accept();
+
                 ObjectInputStream datosEntrada = new ObjectInputStream(cliente.getInputStream());
 
                 paqueteRecibido = (InfoEnvio) datosEntrada.readObject();
 
-                caja.append(paqueteRecibido.getNombre()+">>"+paqueteRecibido.getMensaje()+"\n");
+                nombre = paqueteRecibido.getNombre();//recuperamos la informacion del objeto
+                puerto =  paqueteRecibido.getPuerto();
+                mensaje = paqueteRecibido.getMensaje();
+                direccion = paqueteRecibido.getIp();
+
+
+                caja.append(puerto+"///"+nombre+">>"+mensaje+"\n");
+
+                //Socket reconector =  new Socket(direccion,Integer.parseInt(puerto));
+
+                //ObjectOutputStream paqueteReenvio = new ObjectOutputStream(reconector.getOutputStream());
+
+                //paqueteReenvio.writeObject(paqueteRecibido);
+
+                //paqueteReenvio.close();
+
+                //reconector.close();
+
+                cliente.close();
 
             }
 
+        }catch (IOException | ClassNotFoundException e){
+            System.out.println("Errorzaso");
+            e.printStackTrace();
         }catch (Exception a){
             System.out.println(a.getMessage());
         }
