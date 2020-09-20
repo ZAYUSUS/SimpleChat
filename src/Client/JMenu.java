@@ -48,10 +48,8 @@ class myWindow extends JFrame implements Runnable{
         Inicializador();//inicia los metodos para colocar componentes
     }
     private void Inicializador(){
-        PaperCreator();
-        ComponentesEtiquetas();
-        EntradasTexto();
-        Botones();
+        PaperCreator();//Inicia el panel de para almacenar los componentes
+
 
         Thread Hilo1 = new Thread(this);//crea el hilo para ejecutar el ServerSocket en segundo plano
         Hilo1.start();//inicializa el hilo
@@ -61,6 +59,9 @@ class myWindow extends JFrame implements Runnable{
         paper.setLayout(null);//desactiva el diseño de el layout
         //paper.setBackground(azulito);
         this.getContentPane().add(paper);
+        ComponentesEtiquetas();
+        Botones();
+        EntradasTexto();//Inicia las entradas de texto
     }
     private void ComponentesEtiquetas(){
         //-----------------------------------------------------------------------
@@ -173,7 +174,6 @@ class myWindow extends JFrame implements Runnable{
         texto.setFont(daytona);
         texto.setBackground(amarillo);
         paper.add(texto);
-
 
     }
     private JTextField puerto,texto,direccion;//crea las entradas de texto del nombre ,el puerto,Ip
