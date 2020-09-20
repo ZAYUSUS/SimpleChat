@@ -27,23 +27,25 @@ class myWindow extends JFrame implements Runnable{
     public Color azulito = new Color(28,232,175);//color de fondo
     public Color amarillo = new Color(219,190,22);
     public  Color rosado = new Color(219,22,154);
-    public  Color verde = new Color(14,139,143);
     //------------------Fuentes-------------------------------------
     public Font daytona = new Font("Daytona Pro Light",Font.PLAIN,20);
     //---------------------------------------------------------
-    public JPanel paper;
-    public JTextArea caja;
-    public JLabel indicaPuerto;
-    public JLabel actualPuerto;
-    String Usuario = JOptionPane.showInputDialog("Nombre: ");
-    public myWindow() {
-        setSize(700,800);
-        setTitle("Mensager");
-        setLocation(800,300);
+    public JPanel paper;// panel para insertar los componentes en pantalla
+
+    public JTextArea caja;// Componente donde se imprimirá los mensajes
+
+    public JLabel actualPuerto;//etiqueta para indicar a cual puerto se esta escuchando
+
+    String Usuario = JOptionPane.showInputDialog("Nombre: ");//Ventana emergente para saber el nombre del usuario
+
+    public myWindow() {//constructor de la ventana
+        setSize(700,800);//tamaño de la ventana
+        setTitle("Mensager");//titulo
+        setLocation(800,300);// ubicacion en pantalla
         setResizable(false);
 
         setVisible(true);// vuelve la ventana visible
-        Inicializador();
+        Inicializador();//inicia los metodos para colocar componentes
     }
     private void Inicializador(){
         PaperCreator();
@@ -51,8 +53,8 @@ class myWindow extends JFrame implements Runnable{
         EntradasTexto();
         Botones();
 
-        Thread Hilo1 = new Thread(this);
-        Hilo1.start();
+        Thread Hilo1 = new Thread(this);//crea el hilo para ejecutar el ServerSocket en segundo plano
+        Hilo1.start();//inicializa el hilo
     }
     private void PaperCreator(){//Clase que dibuja en la ventana funciona para introducir imagenes,texto, botones...
         paper = new JPanel();
@@ -102,10 +104,13 @@ class myWindow extends JFrame implements Runnable{
 
     }
     private void Botones(){
-        JButton enviar = new JButton("Enviar");
-        enviar.setBounds(20,550,100,30);
+        JButton enviar = new JButton("Enviar");// boton para enviar la información
+        enviar.setBounds(20,550,100,30);//posicion, alto y ancho del boton
+
         enviar.setBackground(rosado);//Agrega color al boton
-        enviar.setFont(new Font("Daytona Pro Light",Font.PLAIN,20));
+
+        enviar.setFont(new Font("Daytona Pro Light",Font.PLAIN,20));//tipo de letra del boton
+
         paper.add(enviar);//Añade el boton a la ventana
 
         ActionListener AccionBoton = new ActionListener() {
@@ -113,21 +118,23 @@ class myWindow extends JFrame implements Runnable{
             public void actionPerformed(ActionEvent e) {
                 //codigo que se ejecuta al presionar el boton
                 try {
+                    caja.append("Tu: "+texto.getText()+"\n");
                     Socket conector = new Socket(direccion.getText(),Integer.parseInt(puerto.getText()));/*conecta el socket al servidor de escucha con el texto
                     *de las entradas de texto
                     */
 
                     InfoEnvio datos =  new InfoEnvio();//crea un objeto de envio de datos
 
-                    datos.setNombre(nombre.getText());
-                    datos.setMensaje(texto.getText());
-                    datos.setPuerto(puerto.getText());
+                    datos.setNombre(nombre.getText());//Agrega lo que este escrito en el JTextField al objeto
+                    datos.setMensaje(texto.getText());//Agrega lo que este en el JTextField del mensaje al objeto
+                    datos.setPuerto(actualPuerto.getText());
                     datos.setIp(direccion.getText());
 
                     ObjectOutputStream paquete = new ObjectOutputStream(conector.getOutputStream());
                     paquete.writeObject(datos);
 
                     conector.close();//cierra la conexion
+                    texto.setText("");
 
                     } catch (UnknownHostException e1){
                         e1.printStackTrace();
@@ -148,20 +155,20 @@ class myWindow extends JFrame implements Runnable{
         scroll.setBounds(20,60,600,350);
         paper.add(scroll);
 
-        puerto = new JTextField();
+        puerto = new JTextField();//cuadro para insertar el numero de puerto
         puerto.setBounds(300,550,200,30);
         puerto.setFont(daytona);
         puerto.setBackground(azulito);
         paper.add(puerto);
 
-        direccion = new JTextField();
+        direccion = new JTextField();//cuadro para insertar la IP
         direccion.setBounds(300,600,200,30);
         direccion.setFont(daytona);
         direccion.setBackground(azulito);
         direccion.setText("127.0.0.1");
         paper.add(direccion);
 
-        texto = new JTextField();
+        texto = new JTextField();//cuadro para insertar el mensaje
         texto.setBounds(30,450,500,30);
         texto.setFont(daytona);
         texto.setBackground(amarillo);
@@ -175,48 +182,38 @@ class myWindow extends JFrame implements Runnable{
     @Override
     public void run() {//bloque donde estan los sockets
         try{
-            Escanner entrada = new Escanner();
+            Escanner entrada = new Escanner();//crea la instancia del escaner de puertos
 
-            int conexion = entrada.EscannerPuertos();
-            actualPuerto.setText(Integer.toString(conexion));
+            int conexion = entrada.EscannerPuertos();//guarda el numero de puerto disponible
+
+            actualPuerto.setText(Integer.toString(conexion));//agrega el numero a la etiqueta de la pantalla
+
             ServerSocket Servercliente = new ServerSocket(conexion);//crea el puerto donde se escuchara
             Socket cliente;//variable para el socket de envio recogida de datos
 
             String nombre,puerto,mensaje,direccion;
 
-            InfoEnvio paqueteRecibido;
+            InfoEnvio paqueteRecibido;//crea la variable del objeto para enviar informacion
 
             while (true){
-                cliente = Servercliente.accept();
+                cliente = Servercliente.accept();//acepta la conexion con server
 
-                ObjectInputStream datosEntrada = new ObjectInputStream(cliente.getInputStream());
+                ObjectInputStream datosEntrada = new ObjectInputStream(cliente.getInputStream());//carga los datos del objeto InfoEnvio
 
                 paqueteRecibido = (InfoEnvio) datosEntrada.readObject();
 
                 nombre = paqueteRecibido.getNombre();//recuperamos la informacion del objeto
-                puerto =  paqueteRecibido.getPuerto();
                 mensaje = paqueteRecibido.getMensaje();
-                direccion = paqueteRecibido.getIp();
+                puerto = paqueteRecibido.getPuerto();
 
 
-                caja.append(puerto+"///"+nombre+">>"+mensaje+"\n");
+                caja.append("{"+puerto+"}"+nombre+">>"+mensaje+"\n");// crea el mensaje que aparece en el Jtextarea
 
-                //Socket reconector =  new Socket(direccion,Integer.parseInt(puerto));
-
-                //ObjectOutputStream paqueteReenvio = new ObjectOutputStream(reconector.getOutputStream());
-
-                //paqueteReenvio.writeObject(paqueteRecibido);
-
-                //paqueteReenvio.close();
-
-                //reconector.close();
-
-                cliente.close();
+                cliente.close();// cierra la conexion
 
             }
 
         }catch (IOException | ClassNotFoundException e){
-            System.out.println("Errorzaso");
             e.printStackTrace();
         }catch (Exception a){
             System.out.println(a.getMessage());
