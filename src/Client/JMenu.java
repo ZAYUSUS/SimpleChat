@@ -7,7 +7,7 @@ import java.io.Serializable;
 import  java.net.*;
 import java.awt.event.*;
 
-import java.awt.*;
+import java.awt.*;//parte base de la biblioteca grafica
 
 import  javax.swing.*;//importa la biblioteca grafica
 
@@ -30,11 +30,11 @@ class myWindow extends JFrame implements Runnable{
     //------------------Fuentes-------------------------------------
     public Font daytona = new Font("Daytona Pro Light",Font.PLAIN,20);
     //---------------------------------------------------------
-    public JPanel paper;// panel para insertar los componentes en pantalla
+    JPanel paper;// panel para insertar los componentes en pantalla
 
-    public JTextArea caja;// Componente donde se imprimirá los mensajes
+    JTextArea caja;// Componente donde se imprimirá los mensajes
 
-    public JLabel actualPuerto;//etiqueta para indicar a cual puerto se esta escuchando
+    JLabel actualPuerto;//etiqueta para indicar a cual puerto se esta escuchando
 
     String Usuario = JOptionPane.showInputDialog("Nombre: ","Anónimo");//Ventana emergente para saber el nombre del usuario
 
@@ -76,7 +76,7 @@ class myWindow extends JFrame implements Runnable{
         indicaPuerto.setBounds(510,550,70,30);
         paper.add(indicaPuerto);
 
-        JLabel indicaIP = new JLabel("IP",SwingConstants.CENTER);
+        JLabel indicaIP = new JLabel("IP",SwingConstants.CENTER);//etiqueta que indica la IP
         indicaIP.setBounds(510,600,70,30);
         paper.add(indicaIP);
 
@@ -100,7 +100,7 @@ class myWindow extends JFrame implements Runnable{
         indicaEspacio.setFont(new Font("Daytona Pro Light",Font.PLAIN,10));
         paper.add(indicaEspacio);
 
-        nombre = new JLabel(Usuario,SwingConstants.CENTER);
+        nombre = new JLabel(Usuario,SwingConstants.CENTER);//etiqueta que muestra el nombre elegido  por el usuario
         nombre.setBounds(510,20,80,30);
         nombre.setFont(daytona);
         nombre.setOpaque(true);
@@ -148,12 +148,12 @@ class myWindow extends JFrame implements Runnable{
                     datos.setIp(direccion.getText());
 
                     ObjectOutputStream paquete = new ObjectOutputStream(conector.getOutputStream());
-                    paquete.writeObject(datos);
+                    paquete.writeObject(datos);// construye el objeto de envio de datos
 
                     conector.close();//cierra la conexion
                     texto.setText("");
 
-                    } catch (UnknownHostException e1){
+                    } catch (UnknownHostException e1){//detecta si el Host es desconocido
                         e1.printStackTrace();
                     }catch (IOException e1){
                         System.out.println(e1.getMessage());
@@ -273,5 +273,9 @@ class InfoEnvio implements Serializable {//clase para almacenar los datos del cl
     }
 
 }
-// informacion para el codigo por parte de pildorasinformaticas en youtube
+/*Ayuda con el lenguaje, Sockets y la Interfaz gráfica.
+*https://www.youtube.com/channel/UCdulIs-x_xrRd1ezwJZR9ww
+*https://www.w3schools.com/java/java_class_methods.asp
+*https://www.youtube.com/channel/UC7QoKU6bj1QbXQuNIjan82Q
+ */
 
