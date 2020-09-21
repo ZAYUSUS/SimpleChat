@@ -36,7 +36,7 @@ class myWindow extends JFrame implements Runnable{
 
     public JLabel actualPuerto;//etiqueta para indicar a cual puerto se esta escuchando
 
-    String Usuario = JOptionPane.showInputDialog("Nombre: ");//Ventana emergente para saber el nombre del usuario
+    String Usuario = JOptionPane.showInputDialog("Nombre: ","Anónimo");//Ventana emergente para saber el nombre del usuario
 
     public myWindow() {//constructor de la ventana
         setSize(700,800);//tamaño de la ventana
@@ -91,7 +91,7 @@ class myWindow extends JFrame implements Runnable{
         paper.add(indicaEscritor);
 
         JLabel indicaEspacio2 = new JLabel("Escriba Aquí");
-        indicaEspacio2.setBounds(350,600,200,30);
+        indicaEspacio2.setBounds(400,600,200,30);
         indicaEspacio2.setFont(new Font("Daytona Pro Light",Font.PLAIN,10));
         paper.add(indicaEspacio2);
 
@@ -100,20 +100,21 @@ class myWindow extends JFrame implements Runnable{
         indicaEspacio.setFont(new Font("Daytona Pro Light",Font.PLAIN,10));
         paper.add(indicaEspacio);
 
-        nombre = new JLabel();
+        nombre = new JLabel(Usuario,SwingConstants.CENTER);
         nombre.setBounds(510,20,80,30);
         nombre.setFont(daytona);
         nombre.setOpaque(true);
         nombre.setBackground(rosado);
-        nombre.setText(Usuario);
         paper.add(nombre);
 
         indicaPuerto = new JLabel(" Puerto de Escucha");
-        indicaPuerto.setBounds(510,630,150,30);
+        indicaPuerto.setBounds(240,720,150,30);
         paper.add(indicaPuerto);
 
-        actualPuerto = new JLabel();
-        actualPuerto.setBounds(460,630,150,30);
+        actualPuerto = new JLabel("",SwingConstants.CENTER);
+        actualPuerto.setBounds(260,690,80,30);
+        actualPuerto.setOpaque(true);
+        actualPuerto.setBackground(rosado);
         paper.add(actualPuerto);
 
 

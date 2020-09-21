@@ -17,7 +17,7 @@ public class Escanner {
                 System.out.println(port + "\n");
                 prueba.close();
                 ports=port;
-                System.out.println("Esto es ports"+ports);
+                //System.out.println("Esto es ports"+ports);
             } catch (UnknownHostException e) {
                 System.err.println("No se conoce host");
             }catch (IOException e) { }
