@@ -18,11 +18,12 @@ public class JMenu {
 
     }
 }
-/*
- *Se crea la clase de la ventana que hereda
- * de la calse JFrame
+/*En la ventana se puede escribir el tres cuadros diferentes
+ *el amarillo se usa para escribir el mensaje que se desea enviar
+ *el de puerto se usa para indicar el puerto al cual se dirige el mensaje
+ * el de la IP para escribir la dirección IP
  */
-class myWindow extends JFrame implements Runnable{
+class myWindow extends JFrame implements Runnable{//Se crea la clase de la ventana que hereda
     //--------------------COLORES---------------------------
     public Color azulito = new Color(28,232,175);//color de fondo
     public Color amarillo = new Color(219,190,22);
