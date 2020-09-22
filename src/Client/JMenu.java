@@ -18,11 +18,6 @@ public class JMenu {
 
     }
 }
-/*En la ventana se puede escribir el tres cuadros diferentes
- *el amarillo se usa para escribir el mensaje que se desea enviar
- *el de puerto se usa para indicar el puerto al cual se dirige el mensaje
- * el de la IP para escribir la dirección IP
- */
 class myWindow extends JFrame implements Runnable{//Se crea la clase de la ventana que hereda
     //--------------------COLORES---------------------------
     public Color azulito = new Color(28,232,175);//color de fondo
@@ -50,8 +45,6 @@ class myWindow extends JFrame implements Runnable{//Se crea la clase de la venta
     }
     private void Inicializador(){
         PaperCreator();//Inicia el panel de para almacenar los componentes
-
-
         Thread Hilo1 = new Thread(this);//crea el hilo para ejecutar el ServerSocket en segundo plano
         Hilo1.start();//inicializa el hilo
     }
@@ -278,5 +271,10 @@ class InfoEnvio implements Serializable {//clase para almacenar los datos del cl
 *https://www.youtube.com/channel/UCdulIs-x_xrRd1ezwJZR9ww
 *https://www.w3schools.com/java/java_class_methods.asp
 *https://www.youtube.com/channel/UC7QoKU6bj1QbXQuNIjan82Q
+ */
+/*En la ventana se puede escribir en tres cuadros diferentes
+ *el amarillo se usa para escribir el mensaje que se desea enviar
+ *el de puerto se usa para indicar el puerto al cual se dirige el mensaje
+ * el de la IP para escribir la dirección IP
  */
 
