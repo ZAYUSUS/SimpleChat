@@ -218,7 +218,7 @@ class myWindow extends JFrame implements Runnable{//Se crea la clase de la venta
     private JLabel nombre;
 
     @Override
-    public void run() {//bloque donde estan los sockets
+    public void run() {//bloque donde estan los sockets, corre en segundo plano
         try{
             Escanner entrada = new Escanner();//crea la instancia del escaner de puertos
 
@@ -254,7 +254,7 @@ class myWindow extends JFrame implements Runnable{//Se crea la clase de la venta
         }catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
         }catch (Exception a){
-            System.out.println(a.getMessage());
+            System.out.println(a.getMessage());//se emprime el error generado
         }
     }
 }
