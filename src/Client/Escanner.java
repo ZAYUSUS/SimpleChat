@@ -14,14 +14,12 @@ public class Escanner {
         for (int port = 1; port < 1024; port++){
             try {
                 ServerSocket prueba = new ServerSocket(port);
-                System.out.println(port + "\n");
                 prueba.close();
                 ports=port;
-                //System.out.println("Esto es ports"+ports);
             } catch (UnknownHostException e) {
                 System.err.println("No se conoce host");
-            }catch (IOException e) { }
-
+            }catch (IOException e) {
+            }
         }
         return ports;
     }
