@@ -16,9 +16,13 @@ public class Escanner {
                 ServerSocket prueba = new ServerSocket(port);
                 prueba.close();
                 ports=port;
+                break;
             } catch (UnknownHostException e) {
                 System.err.println("No se conoce host");
             }catch (IOException e) {
+                System.out.println(e);
+            }finally {
+                System.out.println("Se escaneo correctamente el puerto "+ ports);
             }
         }
         return ports;

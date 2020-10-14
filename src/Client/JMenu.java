@@ -165,6 +165,8 @@ class myWindow extends JFrame implements Runnable{//Se crea la clase de la venta
                             System.out.println(e1.getMessage());
                             avisos.setForeground(Color.green);
                             avisos.append("Error :"+"No se puede conectar al puerto indicado");
+                        }finally {
+                            System.out.println("Se acabo el proceso de envió de datos");
                         }
                     } else{
                         JOptionPane.showMessageDialog(paper,
@@ -255,6 +257,8 @@ class myWindow extends JFrame implements Runnable{//Se crea la clase de la venta
             e.printStackTrace();
         }catch (Exception a){
             System.out.println(a.getMessage());//se emprime el error generado
+        }finally {
+            System.out.println("Se terminó el proceso de recibido de datos");
         }
     }
 }
@@ -295,6 +299,12 @@ class InfoEnvio implements Serializable {//clase para almacenar los datos del cl
     }
 
 }
+
+
+
+
+
+
 /*Ayuda con el lenguaje, Sockets y la Interfaz gráfica.
 *https://www.youtube.com/channel/UCdulIs-x_xrRd1ezwJZR9ww
 *https://www.w3schools.com/java/java_class_methods.asp
@@ -305,4 +315,3 @@ class InfoEnvio implements Serializable {//clase para almacenar los datos del cl
  *el de puerto se usa para indicar el puerto al cual se dirige el mensaje
  * el de la IP para escribir la dirección IP
  */
-
