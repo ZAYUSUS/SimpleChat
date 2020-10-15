@@ -1,0 +1,6 @@
+Oct 15, 2020 2:50:04 PM Exepciones_ejemplos.ErroresMatematicos Calculo
+SEVERE: Surgió un error aritmetico 
+java.lang.ArithmeticException: / by zero
+	at Exepciones_ejemplos.ErroresMatematicos.Calculo(Exepciones.java:20)
+	at Exepciones_ejemplos.Exepciones.main(Exepciones.java:11)
+

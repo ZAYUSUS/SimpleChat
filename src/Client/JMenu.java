@@ -1,5 +1,7 @@
 package Client;
 
+import Exepciones_ejemplos.Log;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -8,19 +10,21 @@ import  java.net.*;
 import java.awt.event.*;
 
 import java.awt.*;//parte base de la biblioteca grafica
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import  javax.swing.*;//importa la biblioteca grafica
-import javax.swing.border.Border;
-import javax.swing.plaf.basic.BasicBorders;
 
 public class JMenu {
-    public static void main(String[] args ){
+    public static void main(String[] args ) {
         myWindow marco1= new myWindow(); //crea la ventana
         marco1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//hace que la ventana se cierra
     }
 }
 
 class myWindow extends JFrame implements Runnable{//Se crea la clase de la ventana que hereda
+
+    static Logger bitacora = Log.IniciadorLog("Client.JMenu","Bitacora_menu.txt", Level.FINE);//log para errores
 
     //--------------------COLORES---------------------------
     Color azulito = new Color(25,37,158);//color de fondo
@@ -33,14 +37,14 @@ class myWindow extends JFrame implements Runnable{//Se crea la clase de la venta
 
     //------------------Fuentes-------------------------------------
     Font daytona = new Font("Daytona Pro Light",Font.PLAIN,20);
-
     //---------------------------------------------------------
+
     JPanel paper;// panel para insertar los componentes en pantalla
 
-    JTextArea caja;// Componente donde se imprimirá los mensajes
-    JTextArea avisos;//componente que imprime avisos
+    JTextArea caja;
+    JTextArea avisos;
 
-    JLabel actualPuerto;//etiqueta para indicar a cual puerto se esta escuchando
+    JLabel actualPuerto;
 
     String Usuario = JOptionPane.showInputDialog("Nombre: ","Anónimo");//Ventana emergente para saber el nombre del usuario
 
@@ -159,12 +163,16 @@ class myWindow extends JFrame implements Runnable{//Se crea la clase de la venta
                             conector.close();//cierra la conexion
                             caja.append("Tu: " + texto.getText() + "\n");
                             texto.setText("");
+
                         } catch (UnknownHostException e1) {//detecta si el Host es desconocido
                             e1.printStackTrace();
+                            bitacora.info(">>>No se conoce host "+e);//control de bitacora
+
                         } catch (IOException e1) {
-                            System.out.println(e1.getMessage());
                             avisos.setForeground(Color.green);
                             avisos.append("Error :"+"No se puede conectar al puerto indicado");
+
+                            bitacora.log(Level.SEVERE,"No se puede conectar al puerto indicado ",e1);//control bitacora
                         }finally {
                             System.out.println("Se acabo el proceso de envió de datos");
                         }
@@ -254,8 +262,9 @@ class myWindow extends JFrame implements Runnable{//Se crea la clase de la venta
             }
 
         }catch (IOException | ClassNotFoundException e){
-            e.printStackTrace();
+            bitacora.log(Level.SEVERE,"No se recibió la clase correctamente ", e);
         }catch (Exception a){
+            bitacora.log(Level.SEVERE,"Ocurrio un error con los sockets", a);
             System.out.println(a.getMessage());//se emprime el error generado
         }finally {
             System.out.println("Se terminó el proceso de recibido de datos");

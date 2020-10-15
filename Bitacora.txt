@@ -1,0 +1,6 @@
+Oct 15, 2020 2:28:28 PM Client.Escanner EscannerPuertos
+INFO: Error en un puerto java.net.BindException: Address already in use: bind
+Oct 15, 2020 2:28:28 PM Client.Escanner EscannerPuertos
+INFO: Error en un puerto java.net.BindException: Address already in use: bind
+Oct 15, 2020 2:28:28 PM Client.Escanner EscannerPuertos
+INFO: Error en un puerto java.net.BindException: Address already in use: bind
