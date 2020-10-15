@@ -7,11 +7,12 @@ import java.util.logging.Logger;
 public class Exepciones {
 
     public static void main(String[] args) {
-        ErroresMatematicos problema = new ErroresMatematicos();
+        Errores problema = new Errores();
         problema.Calculo();
+        problema.Personalizadas();
     }
 }
-class ErroresMatematicos{//primero ejemplo, manejo por try catch
+class Errores{//primero ejemplo, manejo por try catch
     static Logger control_errores = Log.IniciadorLog("Exepciones_ejemplos","ejemplosexepciones.txt", Level.FINE);
     int num=1;
     int num2=0;
@@ -26,6 +27,13 @@ class ErroresMatematicos{//primero ejemplo, manejo por try catch
         }finally {
             System.out.println("Se completó la operación");
         }
-
+    }
+    public void Personalizadas(){
+        String Nombre = "Bryan";
+        if(Nombre.length()>6) {
+            System.out.println("Esto no puede pasar");
+        }else{
+            throw new StringIndexOutOfBoundsException("No se pudo encontrar un string de ese tamaño");
+        }
     }
 }
