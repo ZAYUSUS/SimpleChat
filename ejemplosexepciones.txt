@@ -16,3 +16,21 @@ java.lang.ArithmeticException: / by zero
 	at Exepciones_ejemplos.Errores.Calculo(Exepciones.java:21)
 	at Exepciones_ejemplos.Exepciones.main(Exepciones.java:11)
 
+Oct 15, 2020 7:56:57 PM Exepciones_ejemplos.Errores Calculo
+SEVERE: Surgió un error aritmetico 
+java.lang.ArithmeticException: / by zero
+	at Exepciones_ejemplos.Errores.Calculo(Exepciones.java:22)
+	at Exepciones_ejemplos.Exepciones.main(Exepciones.java:12)
+
+Oct 15, 2020 8:12:36 PM Exepciones_ejemplos.Errores Calculo
+SEVERE: Surgió un error aritmetico 
+java.lang.ArithmeticException: / by zero
+	at Exepciones_ejemplos.Errores.Calculo(Exepciones.java:31)
+	at Exepciones_ejemplos.Exepciones.main(Exepciones.java:16)
+
+Oct 15, 2020 8:14:16 PM Exepciones_ejemplos.Errores Calculo
+SEVERE: Surgió un error aritmetico 
+java.lang.ArithmeticException: / by zero
+	at Exepciones_ejemplos.Errores.Calculo(Exepciones.java:32)
+	at Exepciones_ejemplos.Exepciones.main(Exepciones.java:16)
+

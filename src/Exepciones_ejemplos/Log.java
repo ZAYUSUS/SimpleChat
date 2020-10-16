@@ -3,12 +3,12 @@ import java.io.IOException;
 import java.util.logging.*;
 
 public class Log {
-    static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+    static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);//obtiene el logger global
 
     public static Logger IniciadorLog(String paquete,String archivo, Level nivel){
 
         try {
-            FileHandler FH = new FileHandler(archivo, true);
+            FileHandler FH = new FileHandler(archivo, true);//archivo que muestra los errores
             logger = Logger.getLogger(paquete);
             logger.addHandler(FH);
 
@@ -20,18 +20,16 @@ public class Log {
             return logger;
         }
         logger.setLevel(nivel);
-        return logger;
+        return logger;//devuelve un objeto para guardar los logs en un archivo
     }
 }
 /*
-         Different Levels in order.
-          OFF
-          SEVERE
-          WARNING
-          INFO
-          CONFIG
-          FINE
-          FINER
-          FINEST
-          ALL
+   Niveles para el logger
+   SEVERE
+   WARNING
+   INFO
+   CONFIG
+   FINE
+   FINER
+   FINEST
 */
