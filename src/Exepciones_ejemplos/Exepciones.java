@@ -6,6 +6,20 @@ import java.nio.file.FileSystemNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+
+
+/*
+ *Esta clase se agrego ya que los ejemplos del codigo de la tarea 1 son muy parecidos
+ * por eso opte por crear algunos ejemplos extra
+ */
+
+
+
+
+
+
+
 public class Exepciones {
 
     public static void main(String[] args) throws nuevaExepcion{
@@ -15,11 +29,7 @@ public class Exepciones {
         problema.ErrorArchivo();
     }
 }
-class nuevaExepcion extends Exception{
-    public nuevaExepcion(String mensaje,Throwable raiz){
-        super("Esta exepcion ha sido creada",raiz);
-    }
-}
+
 class Errores{
     static Logger control_errores = Log.IniciadorLog("Exepciones_ejemplos","ejemplosexepciones.txt", Level.FINE);//log del programa
     int num=1;
@@ -53,5 +63,10 @@ class Errores{
         }catch (IOException e){
             control_errores.log(Level.SEVERE,"No se encontró el archivo",e);
         }
+    }
+}
+class nuevaExepcion extends Exception{
+    public nuevaExepcion(String mensaje,Throwable raiz){
+        super("Esta exepcion ha sido creada",raiz);
     }
 }

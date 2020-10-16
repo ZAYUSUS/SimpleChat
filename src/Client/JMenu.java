@@ -262,7 +262,7 @@ class myWindow extends JFrame implements Runnable{//Se crea la clase de la venta
             }
 
         }catch (IOException | ClassNotFoundException e){
-            bitacora.log(Level.SEVERE,"No se recibió la clase correctamente ", e);
+            bitacora.log(Level.SEVERE,"No se recibió la clase correctamente ", e);//envia el error al handler
         }catch (Exception a){
             bitacora.log(Level.SEVERE,"Ocurrio un error con los sockets", a);
             System.out.println(a.getMessage());//se emprime el error generado
