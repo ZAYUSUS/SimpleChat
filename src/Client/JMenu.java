@@ -172,7 +172,7 @@ class myWindow extends JFrame implements Runnable{//Se crea la clase de la venta
                             avisos.setForeground(Color.green);
                             avisos.append("Error :"+"No se puede conectar al puerto indicado");
 
-                            bitacora.log(Level.SEVERE,"No se puede conectar al puerto indicado ",e1);//control bitacora
+                            bitacora.log(Level.SEVERE,"No se puede conectar al puerto indicado ");//control bitacora
                         }finally {
                             System.out.println("Se acabo el proceso de envió de datos");
                         }
